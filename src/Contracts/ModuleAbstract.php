@@ -52,6 +52,11 @@ abstract class ModuleAbstract implements ModuleInterface
     protected $simpleRouting = false;
 
     /**
+     * @var bool
+     */
+    protected $enable = true;
+
+    /**
      * ModuleDefinition constructor.
      */
     public function __construct()
@@ -144,6 +149,13 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return void
      */
+    abstract function loadBefore();
+
+    /**
+     * Load routes file if exists.
+     *
+     * @return void
+     */
     protected function loadRoutes()
     {
         /** @var Registrar $router */
@@ -198,4 +210,15 @@ abstract class ModuleAbstract implements ModuleInterface
      * @return void
      */
     abstract public function bindRoutes(Registrar $router);
+
+
+    public function setEnable(bool $enable): void
+    {
+        $this->enable = $enable;
+    }
+
+    public function isEnable(): bool
+    {
+        return $this->enable;
+    }
 }

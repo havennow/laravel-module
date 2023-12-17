@@ -31,8 +31,21 @@ class Module implements LoaderInterface
      */
     public function bootstrap()
     {
+        $enable = $modules = config('modules.enable', false);
+
+        if (!$enable) {
+            return;
+        }
+
         foreach ($this->getModulesList() as $module) {
-            $this->enableModule($module);
+
+            $name = $module['name'] ?? null;
+            $enable = $module['enable'] ?? false;
+
+            if ($enable && $name !== null) {
+                $this->enableModule($name);
+            }
+
         }
     }
 
