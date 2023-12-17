@@ -16,7 +16,7 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../../config/module.php' => config_path('modules.php'),
+            __DIR__.'/../config/module.php' => config_path('modules.php'),
         ], 'config');
 
         $loader = $this->app->make(LoaderInterface::class);
