@@ -3,7 +3,6 @@
 namespace Havennow\LaravelModule;
 
 use Havennow\LaravelModule\Contracts\LoaderInterface;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider
@@ -13,7 +12,6 @@ class ModuleServiceProvider extends ServiceProvider
      *
      * @return void
      *
-     * @throws BindingResolutionException
      */
     public function boot()
     {
@@ -21,6 +19,9 @@ class ModuleServiceProvider extends ServiceProvider
             __DIR__.'/../../config/module.php' => config_path('modules.php'),
         ], 'config');
 
+        /**
+         * @var LoaderInterface $loader
+         */
         $loader = $this->app->make(LoaderInterface::class);
         $loader->bootstrap();
     }
@@ -32,8 +33,6 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(LoaderInterface::class, function () {
-            return new Module;
-        });
+        $this->app->singleton(LoaderInterface::class, Module::class);
     }
 }
