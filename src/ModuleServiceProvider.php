@@ -3,7 +3,6 @@
 namespace Havennow\LaravelModule;
 
 use Havennow\LaravelModule\Contracts\LoaderInterface;
-use Havennow\LaravelModule\Contracts\ModuleInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,7 +33,7 @@ class ModuleServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(LoaderInterface::class, function () {
-            return new Module();
+            return new Module;
         });
     }
 }
