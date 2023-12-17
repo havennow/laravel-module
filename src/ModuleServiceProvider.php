@@ -19,11 +19,8 @@ class ModuleServiceProvider extends ServiceProvider
             __DIR__.'/../../config/module.php' => config_path('modules.php'),
         ], 'config');
 
-//        /**
-//         * @var LoaderInterface $loader
-//         */
-//        $loader = $this->app->make(LoaderInterface::class);
-//        $loader->bootstrap();
+        $loader = $this->app->make(LoaderInterface::class);
+        $loader->bootstrap();
     }
 
     /**
@@ -33,6 +30,8 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      //  $this->app->singleton(LoaderInterface::class, Module::class);
+        $this->app->singleton(LoaderInterface::class, function () {
+            return new Module();
+        });
     }
 }
