@@ -5,7 +5,7 @@ namespace Havennow\LaravelModule\Contracts;
 use Doctrine\Inflector\NoopWordInflector;
 use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\View\Factory as View;
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
 
 abstract class ModuleAbstract implements ModuleInterface
 {
