@@ -19,11 +19,11 @@ class ModuleServiceProvider extends ServiceProvider
             __DIR__.'/../../config/module.php' => config_path('modules.php'),
         ], 'config');
 
-        /**
-         * @var LoaderInterface $loader
-         */
-        $loader = $this->app->make(LoaderInterface::class);
-        $loader->bootstrap();
+//        /**
+//         * @var LoaderInterface $loader
+//         */
+//        $loader = $this->app->make(LoaderInterface::class);
+//        $loader->bootstrap();
     }
 
     /**
