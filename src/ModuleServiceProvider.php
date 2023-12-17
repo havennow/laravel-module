@@ -33,6 +33,6 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(LoaderInterface::class, Module::class);
+      //  $this->app->singleton(LoaderInterface::class, Module::class);
     }
 }
