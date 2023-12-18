@@ -29,7 +29,7 @@ Step for setup:
 ### How-use
 
 * Put the ServiceProvider in config/app.php ```\Havennow\LaravelModule\ModuleServiceProvider::class``` in providers section
-* in console ```php artisna laravel-module:make-module Example```
+* in console ```php artisan laravel-module:make-module Example```
 * enable in config in ```'available' => [``` add ```1 => ['name' => 'example', 'enable' => true ]```
 * see the code into Modules path
 * Test example in ```http://localhost/test```
