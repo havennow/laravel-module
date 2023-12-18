@@ -1,11 +1,14 @@
 # Laravel-module
 
+![Logo](./logo.png)
+
 *** 
 Light package based in package archived: https://github.com/ferrl/framework
 
 The objective is, transform your code in simple modules
 
 Require: PHP >= 7.2.5
+
 
 Step for setup:
 
