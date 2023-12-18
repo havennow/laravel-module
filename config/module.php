@@ -5,7 +5,7 @@ return [
     'namespace' => 'App\\Modules',
     'path' => app_path('Modules'),
     'available' => [
-        10 => ['name' => 'other', 'enable' => true],
-        0 => ['name' => 'frontend', 'enable' => false]
+      //  1 => ['name' => 'test', 'enable' => true],
+      //  2 => ['name' => 'frontend', 'enable' => false]
     ],
 ];

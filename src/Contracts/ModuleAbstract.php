@@ -70,9 +70,16 @@ abstract class ModuleAbstract implements ModuleInterface
      */
     public function bootstrap()
     {
-        $this->loadHelpers();
+        $this->loadBefore();
+
+        if (!$this->isEnable()) {
+            return;
+        }
+
         $this->loadRoutes();
+        $this->loadComposers();
         $this->loadViews();
+        $this->loadHelpers();
     }
 
     /**
@@ -149,7 +156,10 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return void
      */
-    abstract function loadBefore();
+    protected function loadBefore()
+    {
+        //before for example disable or enable
+    }
 
     /**
      * Load routes file if exists.
@@ -179,7 +189,7 @@ abstract class ModuleAbstract implements ModuleInterface
         $viewsFolder = realpath($this->getModulesFolder().'/Views');
 
         if (file_exists($viewsFolder)) {
-            $view->addNamespace($this->getModulesPrefix(), $viewsFolder);
+            $view->addLocation($viewsFolder);
         }
     }
 
