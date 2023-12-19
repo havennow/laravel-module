@@ -12,7 +12,7 @@ Require: PHP >= 7.2.5
 
 Step for setup:
 
-* ```composer require havennow\laravel-module```
+* ```composer require havennow/laravel-module```
 * ```php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleProvider" --tag=config```
 * see in config/modules.ph configs
 
@@ -32,7 +32,7 @@ Step for setup:
 * in console ```php artisan laravel-module:make-module Example```
 * enable in config in ```'available' => [``` add ```1 => ['name' => 'example', 'enable' => true ]```
 * see the code into Modules path
-* Test example in ```http://localhost/test```
+* Test example in ```http://localhost/example```
 
 
 Can custom abstract class for Module
