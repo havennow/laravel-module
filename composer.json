@@ -41,6 +41,16 @@
       "phpstan/extension-installer": true
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Havennow\\LaravelModule\\ModuleServiceProvider"
+      ],
+      "aliases": {
+        "Module": "Havennow\\LaravelModule\\Facades\\Module"
+      }
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }
