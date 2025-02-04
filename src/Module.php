@@ -31,7 +31,7 @@ class Module implements LoaderInterface
      */
     public function bootstrap()
     {
-        $enable = $modules = config('modules.enable', false);
+        $enable = config('modules.enable', false);
 
         if (!$enable) {
             return;

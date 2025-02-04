@@ -212,7 +212,8 @@ BLADE;
         $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $nameSpace = $this->getNamespaceOfModules();
-        $nameLowerCase = strtolower($name);
+        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name )), '-');
+
         //Module root
 
         $code = <<<PHP
@@ -227,14 +228,14 @@ class Module extends ModuleAbstract
 {
 
     /**
-     * Loads modules composers.
+     * Loads modules composers. if enabled
      *
      * @return void
      */
-    protected function loadComposers()
-    {
-        view()->composer('#nameLowerCase#.*', #namespaceInfile# . '\Composers\#name#Composer');
-    }
+    //protected function loadComposers()
+    //{
+    //    view()->composer('#nameLowerCase#.*', #namespaceInfile# . '\Composers\#name#Composer');
+    //}
 
     public function bindRoutes(Registrar #router#)
     {

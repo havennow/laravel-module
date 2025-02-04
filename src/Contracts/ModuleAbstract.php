@@ -45,16 +45,14 @@ abstract class ModuleAbstract implements ModuleInterface
     protected $prefix;
 
     /**
-     * Should create simple {controller}/{action} routes.
-     *
      * @var bool
      */
-    protected $simpleRouting = false;
+    protected $enable = true;
 
     /**
      * @var bool
      */
-    protected $enable = true;
+    protected $view = false;
 
     /**
      * ModuleDefinition constructor.
@@ -66,7 +64,7 @@ abstract class ModuleAbstract implements ModuleInterface
     /**
      * Bootstrap a new module.
      *
-     * @return bool
+     * @return void
      */
     public function bootstrap()
     {
@@ -77,8 +75,12 @@ abstract class ModuleAbstract implements ModuleInterface
         }
 
         $this->loadRoutes();
-        $this->loadComposers();
-        $this->loadViews();
+
+        if ($this->isViewEnable()) {
+            $this->loadComposers();
+            $this->loadViews();
+        }
+
         $this->loadHelpers();
     }
 
@@ -87,7 +89,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return string
      */
-    protected function getName()
+    protected function getName(): string
     {
         return $this->name;
     }
@@ -97,7 +99,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return string
      */
-    protected function getModulesFolder()
+    protected function getModulesFolder(): string
     {
         if (! $this->path) {
             $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
@@ -112,7 +114,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return string
      */
-    protected function getModulesNamespace()
+    protected function getModulesNamespace(): string
     {
         if (! $this->namespace) {
             $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
@@ -127,7 +129,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return string
      */
-    protected function getModulesPrefix()
+    protected function getModulesPrefix(): string
     {
         if (! $this->prefix) {
             $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
@@ -142,7 +144,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return void
      */
-    protected function loadHelpers()
+    protected function loadHelpers(): void
     {
         $helpersFile = $this->getModulesFolder().'/helpers.php';
 
@@ -152,13 +154,21 @@ abstract class ModuleAbstract implements ModuleInterface
     }
 
     /**
-     * Load routes file if exists.
+     * Load before code run.
      *
      * @return void
      */
-    protected function loadBefore()
+    protected function loadBefore(): void
     {
         //before for example disable or enable
+    }
+
+    /**
+     * @return void
+     */
+    protected function loadComposers(): void
+    {
+        // load view composer
     }
 
     /**
@@ -166,7 +176,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return void
      */
-    protected function loadRoutes()
+    protected function loadRoutes(): void
     {
         /** @var Registrar $router */
         $router = $this->app->make('router');
@@ -182,7 +192,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @return void
      */
-    protected function loadViews()
+    protected function loadViews(): void
     {
         /** @var View $view */
         $view = $this->app->make(View::class);
@@ -198,7 +208,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @param \Illuminate\Foundation\Application $app
      */
-    public function setApp($app)
+    public function setApp($app): void
     {
         $this->app = $app;
     }
@@ -208,7 +218,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -219,7 +229,7 @@ abstract class ModuleAbstract implements ModuleInterface
      * @param Registrar $router
      * @return void
      */
-    abstract public function bindRoutes(Registrar $router);
+    abstract public function bindRoutes(Registrar $router): void;
 
 
     public function setEnable(bool $enable): void
@@ -230,5 +240,15 @@ abstract class ModuleAbstract implements ModuleInterface
     public function isEnable(): bool
     {
         return $this->enable;
+    }
+
+    public function setView(bool $enable): void
+    {
+        $this->view = $enable;
+    }
+
+    public function isViewEnable(): bool
+    {
+        return $this->view;
     }
 }
