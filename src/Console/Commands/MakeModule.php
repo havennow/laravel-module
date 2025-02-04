@@ -84,6 +84,14 @@ class MakeModule extends Command
 
         $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
         $path = sprintf('%s/%s/%s', $this->getPathOfModules(), $inflector->classify($name), 'Config');
+        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name )), '-');
+
+        $appConfigModulesPatch = app_path('config/modules');
+
+        if (!is_dir($appConfigModulesPatch)) {
+            File::makeDirectory($appConfigModulesPatch);
+            $this->info('Created config module path : ' . $appConfigModulesPatch);
+        }
 
         if (!is_dir($path)) {
 
@@ -94,14 +102,32 @@ class MakeModule extends Command
         if (is_dir($path)) {
             $code = <<<PHP
 <?php
+/**
+ * because cached env is more secure, catch envs
+ */
+return array_merge(config('modules.#nameLowerCase#'), ['dontuseenv' => 'maybeputhere']);
+
+PHP;
+            $code = str_replace(
+                ['#nameLowerCase#'],
+                [$nameLowerCase],
+                $code
+            );
+            file_put_contents(sprintf('%s/main.php', $path), $code);
+
+
+        }
+
+        if (is_dir($appConfigModulesPatch)) {
+            $code = <<<PHP
+<?php
 
 return [
-    'your_config' => env('APP_ENV')
+    'yourenv' => env('yourenv'),
 ];
 
 PHP;
-
-            file_put_contents(sprintf('%s/main.php', $path), $code);
+            file_put_contents(sprintf('%s/%s.php', $appConfigModulesPatch, $nameLowerCase), $code);
         }
 
     }
@@ -144,7 +170,7 @@ class #name#Composer
     /**
      * Bind data to the view.
      *
-     * @param  View  #view#
+     * @param  View #view#
      * @return void
      */
     public function compose(View #view#)
