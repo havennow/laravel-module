@@ -238,7 +238,7 @@ class Module extends ModuleAbstract
     //    view()->composer('#nameLowerCase#.*', #namespaceInfile# . '\Composers\#name#Composer');
     //}
 
-    public function bindRoutes(Registrar #router#)
+    public function bindRoutes(Registrar #router#):void
     {
         #router#->group(['middleware' => ['web', 'auth'], 'prefix' => '#nameLowerCase#'], function (Registrar #router#) {
             #router#->get('/', '#name#Controller@index')->name('#nameLowerCase#.index');
