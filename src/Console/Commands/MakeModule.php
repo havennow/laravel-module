@@ -110,7 +110,7 @@ namespace #namespace#;
 
 use Illuminate\View\View;
 
-class TestComposer
+class #name#Composer
 {
     /**
      * Bind data to the view.
@@ -130,8 +130,8 @@ PHP;
 
 
         $code = str_replace(
-            ['#view#', '#namespace#'],
-            ['$view', $nameSpace],
+            ['#view#', '#namespace#', '#name#'],
+            ['$view', $nameSpace, $name],
             $code
         );
 
@@ -145,6 +145,7 @@ PHP;
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $pathController = sprintf('%s/%s', $path, self::SUB_FOLDERS[0]);
         $nameSpace = sprintf('%s\%s\%s', $this->getNamespaceOfModules(), $name, self::SUB_FOLDERS[0]);
+        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name )), '-');
 
         //Module root
 
@@ -159,7 +160,7 @@ class #name#Controller extends Controller
 {
     public function index()
     {
-        return view('test.index');
+        return view('#nameLowerCase#.index');
     }
 }
 
@@ -167,8 +168,8 @@ PHP;
 
 
         $code = str_replace(
-            ['#namespace#', '#name#'],
-            [$nameSpace, $name],
+            ['#namespace#', '#name#', '#nameLowerCase#'],
+            [$nameSpace, $name, $nameLowerCase],
             $code
         );
 
@@ -182,7 +183,7 @@ PHP;
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $viewPath = sprintf('%s/%s', $path, self::SUB_FOLDERS[2]);
         $nameSpace = $this->getNamespaceOfModules();
-        $nameLowerCase = strtolower($name);
+        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name )), '-');
         $viewFileNamePath = sprintf('%s/%s', $viewPath, $nameLowerCase);
 
         if (!is_dir($viewPath)) {
