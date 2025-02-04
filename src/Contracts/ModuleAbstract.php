@@ -21,7 +21,7 @@ abstract class ModuleAbstract implements ModuleInterface
      *
      * @var string
      */
-    protected static $name;
+    protected $name;
 
     /**
      * Full path of the module.
@@ -91,7 +91,7 @@ abstract class ModuleAbstract implements ModuleInterface
      */
     protected function getName(): string
     {
-        return self::$name;
+        return $this->name;
     }
 
     /**
@@ -109,10 +109,10 @@ abstract class ModuleAbstract implements ModuleInterface
         return $this->path;
     }
 
-    private static function getConfigModulesFile(?string $name = null): string
+    private static function getConfigModulesFile(?string $name = null): ?array
     {
         if (blank($name)) {
-            $name = self::$name;
+            return null;
         }
 
         $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
@@ -123,7 +123,11 @@ abstract class ModuleAbstract implements ModuleInterface
             .'/Config/main.php'
         );
 
-        return $file;
+        if (file_exists($file)) {
+            return require $file;
+        }
+
+        return null;
     }
 
     /**
@@ -132,7 +136,7 @@ abstract class ModuleAbstract implements ModuleInterface
      */
     public static function getConfigModule(?string $name = null)
     {
-        return require self::getConfigModulesFile($name);
+        return self::getConfigModulesFile($name);
     }
 
     /**
@@ -246,7 +250,7 @@ abstract class ModuleAbstract implements ModuleInterface
      */
     public function setName($name): void
     {
-        self::$name = $name;
+        $this->name = $name;
     }
 
     /**
