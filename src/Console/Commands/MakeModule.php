@@ -296,9 +296,14 @@ class Module extends ModuleAbstract
 
     public function bindRoutes(Registrar #router#):void
     {
-        #router#->group(['middleware' => ['web', 'auth'], 'prefix' => '#nameLowerCase#'], function (Registrar #router#) {
+        #router#->group(['middleware' => ['throttle:api'], 'prefix' => '#nameLowerCase#'], function (Registrar #router#) {
             #router#->get('/', '#name#Controller@index')->name('#nameLowerCase#.index');
         });
+    }
+    
+    public static function getModuleName(): string
+    {
+        return '#name#';
     }
 }
 PHP;
