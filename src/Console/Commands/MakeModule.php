@@ -86,18 +86,14 @@ class MakeModule extends Command
         $path = sprintf('%s/%s/%s', $this->getPathOfModules(), $inflector->classify($name), 'Config');
         $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name )), '-');
 
-        $appConfigModulesPatch = app_path('config/modules');
-
-        if (!is_dir($appConfigModulesPatch)) {
-            File::makeDirectory($appConfigModulesPatch);
-            $this->info('Created config module path : ' . $appConfigModulesPatch);
-        }
-
+        $appConfigModulesPatch = config_path('modules');
+        
         if (!is_dir($path)) {
 
             File::makeDirectory($path);
             $this->info('Created config module path : ' . $path);
         }
+
 
         if (is_dir($path)) {
             $code = <<<PHP
@@ -116,6 +112,11 @@ PHP;
             file_put_contents(sprintf('%s/main.php', $path), $code);
 
 
+        }
+
+        if (!is_dir($appConfigModulesPatch)) {
+            File::makeDirectory($appConfigModulesPatch);
+            $this->info('Created config module path : ' . $appConfigModulesPatch);
         }
 
         if (is_dir($appConfigModulesPatch)) {
