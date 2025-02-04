@@ -43,6 +43,7 @@ class MakeModule extends Command
         $this->makeDefaultModuleComposerFile($name);
         $this->makeDefaultModuleView($name);
         $this->makeDefaultModuleControllerFile($name);
+        $this->makeDefaultModuleConfigFile($name);
 
         $this->info("Done!");
     }
@@ -77,6 +78,34 @@ class MakeModule extends Command
         $this->makeSubfolders($path);
 
     }
+
+    private function makeDefaultModuleConfigFile($name)
+    {
+
+        $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+        $path = sprintf('%s/%s/%s', $this->getPathOfModules(), $inflector->classify($name), 'Config');
+
+        if (!is_dir($path)) {
+
+            File::makeDirectory($path);
+            $this->info('Created config module path : ' . $path);
+        }
+
+        if (is_dir($path)) {
+            $code = <<<PHP
+<?php
+
+return [
+    'your_config' => env('APP_ENV')
+];
+
+PHP;
+
+            file_put_contents(sprintf('%s/main.php', $path), $code);
+        }
+
+    }
+
 
     private function makeSubfolders($path)
     {
