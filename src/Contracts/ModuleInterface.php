@@ -22,6 +22,23 @@ interface ModuleInterface
      * Set name of the module.
      *
      * @param  string  $name
+     * @return void
      */
     public function setName($name);
+
+    /**
+     * Set view enable or not
+     *
+     * @param  bool  $enable
+     */
+    public function setView($enable): void;
+
+    /**
+     * Set route prefix
+     *
+     * @return mixed
+     */
+    public function setRoutePrefix($routePrefix): void;
+
+    public static function getModuleName(): string;
 }
