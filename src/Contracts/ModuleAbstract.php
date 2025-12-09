@@ -2,10 +2,10 @@
 
 namespace Havennow\LaravelModule\Contracts;
 
+use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\NoopWordInflector;
 use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\View\Factory as View;
-use Doctrine\Inflector\Inflector;
 
 abstract class ModuleAbstract implements ModuleInterface
 {
@@ -55,22 +55,23 @@ abstract class ModuleAbstract implements ModuleInterface
     protected $view = false;
 
     /**
+     * @var string
+     */
+    protected $routePrefix;
+
+    /**
      * ModuleDefinition constructor.
      */
-    public function __construct()
-    {
-    }
+     public function __construct() {}
 
     /**
      * Bootstrap a new module.
-     *
-     * @return void
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
         $this->loadBefore();
 
-        if (!$this->isEnable()) {
+        if (! $this->isEnable()) {
             return;
         }
 
@@ -86,23 +87,29 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Get module name.
-     *
-     * @return string
      */
     protected function getName(): string
     {
         return $this->name;
     }
 
+    protected function getRoutePrefix(): string
+    {
+        return $this->routePrefix;
+    }
+
+    public function setRoutePrefix($routePrefix): void
+    {
+        $this->routePrefix = $routePrefix;
+    }
+
     /**
      * Get module folder full path.
-     *
-     * @return string
      */
     protected function getModulesFolder(): string
     {
         if (! $this->path) {
-            $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+            $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
             $this->path = realpath(config('modules.path').'/'.$inflector->classify($this->getName()));
         }
 
@@ -115,7 +122,7 @@ abstract class ModuleAbstract implements ModuleInterface
             return null;
         }
 
-        $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+        $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $file = realpath(
             config('modules.path')
             .'/'.
@@ -130,24 +137,18 @@ abstract class ModuleAbstract implements ModuleInterface
         return null;
     }
 
-    /**
-     * @param string|null $name
-     * @return mixed
-     */
-    public static function getConfigModule(?string $name = null)
+    public static function getConfigModule(?string $name = null): mixed
     {
         return self::getConfigModulesFile($name);
     }
 
     /**
      * Get module full namespace.
-     *
-     * @return string
      */
     protected function getModulesNamespace(): string
     {
         if (! $this->namespace) {
-            $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+            $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
             $this->namespace = config('modules.namespace').'\\'.$inflector->classify($this->getName());
         }
 
@@ -156,13 +157,11 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Get module full namespace.
-     *
-     * @return string
      */
     protected function getModulesPrefix(): string
     {
         if (! $this->prefix) {
-            $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+            $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
             $this->prefix = $inflector->tableize($this->getName());
         }
 
@@ -171,8 +170,6 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Load helpers file if exists.
-     *
-     * @return void
      */
     protected function loadHelpers(): void
     {
@@ -185,17 +182,12 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Load before code run.
-     *
-     * @return void
      */
     protected function loadBefore(): void
     {
-        //before for example disable or enable
+        // before for example disable or enable
     }
 
-    /**
-     * @return void
-     */
     protected function loadComposers(): void
     {
         // load view composer
@@ -203,24 +195,26 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Load routes file if exists.
-     *
-     * @return void
      */
     protected function loadRoutes(): void
     {
         /** @var Registrar $router */
         $router = $this->app->make('router');
         $namespace = $this->getModulesNamespace().'\\Controllers';
+        $routePrefix = $this->getRoutePrefix();
+        $params = ['namespace' => $namespace];
 
-        $router->group(compact('namespace'), function () use ($router) {
+        if (filled($routePrefix)) {
+            $params['prefix'] = $routePrefix;
+        }
+
+        $router->group($params, function () use ($router) {
             $this->bindRoutes($router);
         });
     }
 
     /**
      * Load views folder if exists.
-     *
-     * @return void
      */
     protected function loadViews(): void
     {
@@ -236,7 +230,7 @@ abstract class ModuleAbstract implements ModuleInterface
     /**
      * Set laravel's container instance.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      */
     public function setApp($app): void
     {
@@ -246,7 +240,7 @@ abstract class ModuleAbstract implements ModuleInterface
     /**
      * Set name of the module.
      *
-     * @param string $name
+     * @param  string  $name
      */
     public function setName($name): void
     {
@@ -255,12 +249,8 @@ abstract class ModuleAbstract implements ModuleInterface
 
     /**
      * Bind application routes.
-     *
-     * @param Registrar $router
-     * @return void
      */
     abstract public function bindRoutes(Registrar $router): void;
-
 
     public function setEnable(bool $enable): void
     {
@@ -272,7 +262,7 @@ abstract class ModuleAbstract implements ModuleInterface
         return $this->enable;
     }
 
-    public function setView(bool $enable): void
+    public function setView($enable): void
     {
         $this->view = $enable;
     }

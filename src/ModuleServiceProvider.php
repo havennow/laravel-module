@@ -12,14 +12,13 @@ class ModuleServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      * @return void
-     *
      */
     public function boot()
     {
 
         $this->publishes([
-            __DIR__.'/../config/module.php' => config_path('modules.php'),
-        ]);
+            __DIR__.'/../config/modules.php' => config_path('modules.php'),
+        ], 'config');
 
         $loader = $this->app->make(LoaderInterface::class);
         $loader->bootstrap();
@@ -42,8 +41,12 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/modules.php', 'modules.php'
+        );
+
         $this->app->singleton(LoaderInterface::class, function () {
-            return new Module();
+            return new Module;
         });
     }
 }

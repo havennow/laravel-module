@@ -9,11 +9,10 @@ The objective is, transform your code in simple modules
 
 Require: PHP >= 7.2.5
 
-
 Step for setup:
 
 * ```composer require havennow/laravel-module```
-* ```php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleProvider" --tag=config```
+* ```php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleServiceProvider" --tag=config```
 * see in config/modules.ph configs
 
 ***
@@ -24,7 +23,8 @@ Step for setup:
 * you can enable specify module ```1 => ['name' => 'XPTO', 'enable' => true ]```
 * the index in array need be integer, for order load, in case one module load before another
 * for default the folder is `app/Modules`,  and namespace ```App\Modules```
-
+* can use prefix route ```['route_prefix=> 'api' ]```
+* can enable view or disable ```['view_enable' => false]```
 
 ### How-use
 

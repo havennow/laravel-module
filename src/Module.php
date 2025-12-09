@@ -33,7 +33,7 @@ class Module implements LoaderInterface
     {
         $enable = config('modules.enable', false);
 
-        if (!$enable) {
+        if (! filter_var($enable, FILTER_VALIDATE_BOOLEAN)) {
             return;
         }
 
@@ -41,11 +41,12 @@ class Module implements LoaderInterface
 
             $name = $module['name'] ?? null;
             $enable = $module['enable'] ?? false;
+            $routePrefix = $module['route_prefix'] ?? null;
+            $isViewEnable = $module['view_enable'] ?? false;
 
-            if ($enable && $name !== null) {
-                $this->enableModule($name);
+            if (filter_var($enable, FILTER_VALIDATE_BOOLEAN) && filled($name)) {
+                $this->enableModule($this->setModuleConfig($name, $routePrefix, $isViewEnable));
             }
-
         }
     }
 
@@ -70,20 +71,25 @@ class Module implements LoaderInterface
      */
     protected function getFullyQualifiedModuleClassName($module)
     {
-        $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
+        $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
 
         return config('modules.namespace').'\\'.$inflector->classify($module);
     }
 
     /**
-     * Load a single module by it's name.
+     * Load a single module
      *
-     * @param  string  $moduleName
      * @return bool
-     *
-     * @throws BindingResolutionException
      */
-    protected function enableModule($moduleName)
+    protected function enableModule(ModuleInterface $module)
+    {
+        return $module->bootstrap();
+    }
+
+    /**
+     * @return ModuleInterface
+     */
+    private function setModuleConfig($moduleName, $routePrefix = null, $isViewEnabled = false)
     {
         $definition = $this->getFullyQualifiedModuleClassName($moduleName).'\\Module';
 
@@ -94,13 +100,11 @@ class Module implements LoaderInterface
         /** @var ModuleInterface $module */
         $module = $this->app->make($definition);
 
-        if (! $module instanceof ModuleInterface) {
-            throw new RuntimeException("Class {$definition} must implements Module interface");
-        }
-
         $module->setApp($this->app);
         $module->setName($moduleName);
+        $module->setRoutePrefix($routePrefix);
+        $module->setView($isViewEnabled);
 
-        return $module->bootstrap();
+        return $module;
     }
 }
