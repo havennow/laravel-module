@@ -320,7 +320,7 @@ PHP;
         $path = $this->getPathOfModules();
 
         if (empty($path)) {
-            $this->warn('Config missing, please run : php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleProvider" --tag=config');
+            $this->warn('Config missing, please run : php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleServiceProvider" --tag=config');
 
             return;
         }
