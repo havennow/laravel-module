@@ -44,7 +44,7 @@ class MakeModule extends Command
         $this->makeDefaultModuleControllerFile($name);
         $this->makeDefaultModuleConfigFile($name);
 
-        $this->info('Done!');
+        $this->info('Done!, now enable module in config.');
     }
 
     private function getPathOfModules(): ?string
@@ -289,7 +289,11 @@ class Module extends ModuleAbstract
 
     public function bindRoutes(Registrar #router#):void
     {
-        #router#->group(['middleware' => ['throttle:api'], 'prefix' => '#nameLowerCase#'], function (Registrar #router#) {
+            /**
+            *  need define throttle, add middlewares
+            *  ['middleware' => ['throttle:api', 'api']
+            */
+        #router#->group(['middleware' => [], 'prefix' => '#nameLowerCase#'], function (Registrar #router#) {
             #router#->get('/', '#name#Controller@index')->name('#nameLowerCase#.index');
         });
     }

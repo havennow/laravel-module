@@ -62,7 +62,7 @@ abstract class ModuleAbstract implements ModuleInterface
     /**
      * ModuleDefinition constructor.
      */
-     public function __construct() {}
+    public function __construct() {}
 
     /**
      * Bootstrap a new module.
@@ -93,7 +93,7 @@ abstract class ModuleAbstract implements ModuleInterface
         return $this->name;
     }
 
-    protected function getRoutePrefix(): string
+    protected function getRoutePrefix(): ?string
     {
         return $this->routePrefix;
     }
@@ -270,5 +270,10 @@ abstract class ModuleAbstract implements ModuleInterface
     public function isViewEnable(): bool
     {
         return $this->view;
+    }
+
+    public static function getModuleName(): string
+    {
+        return static::getName();
     }
 }

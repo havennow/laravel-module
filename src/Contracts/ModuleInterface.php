@@ -39,4 +39,6 @@ interface ModuleInterface
      * @return mixed
      */
     public function setRoutePrefix($routePrefix): void;
+
+    public static function getModuleName(): string;
 }

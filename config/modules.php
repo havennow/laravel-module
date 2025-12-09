@@ -5,7 +5,17 @@ return [
     'namespace' => 'App\\Modules',
     'path' => app_path('Modules'),
     'available' => [
-        //  1 => ['name' => 'test', 'enable' => true, 'view_enable' => true, 'route_prefix' => 'api'],
-        //  2 => ['name' => 'api', 'enable' => false]
+//        1 => [
+//            'name' => 'test',
+//            'enable' => env('TEST_LARAVEL_MODULE_ENABLE', true),
+//            'view_enable' => false,
+//            'route_prefix' => 'api'
+//        ],
+//        2 => [
+//            'name' => 'api',
+//            'enable' => env('API_LARAVEL_MODULE_ENABLE', true),
+//            'view_enable' => false,
+//            'route_prefix' => 'api'
+//        ],
     ],
 ];
