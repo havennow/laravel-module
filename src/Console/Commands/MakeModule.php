@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
  */
 class MakeModule extends Command
 {
-    const SUB_FOLDERS = ['Controllers', 'Models', 'Views', 'Composers'];
+    public const SUB_FOLDERS = ['Controllers', 'Models', 'Views', 'Composers'];
 
     /**
      * The name and signature of the console command.
@@ -31,11 +31,11 @@ class MakeModule extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $name = (string) $this->argument('name');
+        $name = (string)$this->argument('name');
         $this->makeModuleFolder();
         $this->makeModuleNameFolder($name);
         $this->makeDefaultModuleFile($name);
@@ -61,36 +61,35 @@ class MakeModule extends Command
         return $config['namespace'] ?? null;
     }
 
-    private function makeModuleNameFolder($name)
+    private function makeModuleNameFolder(string $name): void
     {
 
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
-        $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
 
-        if (! is_dir($path)) {
+        if (!is_dir($path)) {
 
             File::makeDirectory($path);
-            $this->info('Created module path : '.$path);
+            $this->info('Created module path : ' . $path);
         }
 
         $this->makeSubfolders($path);
 
     }
 
-    private function makeDefaultModuleConfigFile($name)
+    private function makeDefaultModuleConfigFile(string $name): void
     {
 
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s/%s', $this->getPathOfModules(), $inflector->classify($name), 'Config');
-        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name)), '-');
+        $nameLowerCase = strtolower(ltrim(preg_replace('/[A-Z]/', '-$0', $name), '-'));
 
         $appConfigModulesPatch = config_path('modules');
 
-        if (! is_dir($path)) {
+        if (!is_dir($path)) {
 
             File::makeDirectory($path);
-            $this->info('Created config module path : '.$path);
+            $this->info('Created config module path : ' . $path);
         }
 
         if (is_dir($path)) {
@@ -111,9 +110,9 @@ PHP;
 
         }
 
-        if (! is_dir($appConfigModulesPatch)) {
+        if (!is_dir($appConfigModulesPatch)) {
             File::makeDirectory($appConfigModulesPatch);
-            $this->info('Created config module path : '.$appConfigModulesPatch);
+            $this->info('Created config module path : ' . $appConfigModulesPatch);
         }
 
         if (is_dir($appConfigModulesPatch)) {
@@ -130,7 +129,7 @@ PHP;
 
     }
 
-    private function makeSubfolders($path)
+    private function makeSubfolders($path): void
     {
         if (is_dir($path)) {
             foreach (self::SUB_FOLDERS as $subFolder) {
@@ -141,12 +140,12 @@ PHP;
                 }
 
                 File::makeDirectory($subFolderPath);
-                $this->info('Created module path : '.$subFolderPath);
+                $this->info('Created module path : ' . $subFolderPath);
             }
         }
     }
 
-    private function makeDefaultModuleComposerFile($name)
+    private function makeDefaultModuleComposerFile(string $name): void
     {
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
@@ -190,13 +189,13 @@ PHP;
 
     }
 
-    private function makeDefaultModuleControllerFile($name)
+    private function makeDefaultModuleControllerFile(string $name): void
     {
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $pathController = sprintf('%s/%s', $path, self::SUB_FOLDERS[0]);
         $nameSpace = sprintf('%s\%s\%s', $this->getNamespaceOfModules(), $name, self::SUB_FOLDERS[0]);
-        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name)), '-');
+        $nameLowerCase = strtolower(ltrim(preg_replace('/[A-Z]/', '-$0', $name), '-'));
 
         // Module root
 
@@ -227,20 +226,19 @@ PHP;
 
     }
 
-    private function makeDefaultModuleView($name)
+    private function makeDefaultModuleView(string $name): void
     {
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $viewPath = sprintf('%s/%s', $path, self::SUB_FOLDERS[2]);
-        $nameSpace = $this->getNamespaceOfModules();
-        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name)), '-');
+        $nameLowerCase = strtolower(ltrim(preg_replace('/[A-Z]/', '-$0', $name), '-'));
         $viewFileNamePath = sprintf('%s/%s', $viewPath, $nameLowerCase);
 
-        if (! is_dir($viewPath)) {
+        if (!is_dir($viewPath)) {
             File::makeDirectory($viewPath);
         }
 
-        if (! is_dir($viewFileNamePath)) {
+        if (!is_dir($viewFileNamePath)) {
             File::makeDirectory($viewFileNamePath);
         }
 
@@ -257,12 +255,12 @@ BLADE;
         file_put_contents(sprintf('%s/index.blade.php', $viewFileNamePath), $code);
     }
 
-    private function makeDefaultModuleFile($name)
+    private function makeDefaultModuleFile(string $name): void
     {
         $inflector = new Inflector(new NoopWordInflector, new NoopWordInflector);
         $path = sprintf('%s/%s', $this->getPathOfModules(), $inflector->classify($name));
         $nameSpace = $this->getNamespaceOfModules();
-        $nameLowerCase = ltrim(strtolower(preg_replace('/[A-Z]/', '-$0', $name)), '-');
+        $nameLowerCase = strtolower(ltrim(preg_replace('/[A-Z]/', '-$0', $name), '-'));
 
         // Module root
 
@@ -315,21 +313,33 @@ PHP;
 
     }
 
-    private function makeModuleFolder()
+    private function makeModuleFolder(): void
     {
         $path = $this->getPathOfModules();
 
         if (empty($path)) {
-            $this->warn('Config missing, please run : php artisan vendor:publish --provider="Havennow\LaravelModule\ModuleServiceProvider" --tag=config');
+            $this->warn('Config missing, please run : php artisan vendor:publish --provider="Havennow\\LaravelModule\\ModuleServiceProvider" --tag=config');
 
             return;
         }
 
-        if (! is_dir($path)) {
+        if (!is_dir($path)) {
             File::makeDirectory($path);
-            $this->info('Created module path : '.$path);
+            $this->info('Created module path : ' . $path);
         } else {
-            $this->info('Has already been created :'.$path);
+            $this->info('Has already been created :' . $path);
+        }
+    }
+
+    private function makeModuleCleanArchFolder(): void
+    {
+        $path = $this->getPathOfModules();
+
+        if (!is_dir($path)) {
+            File::makeDirectory($path);
+            $this->info('Created module path : ' . $path);
+        } else {
+            $this->info('Has already been created :' . $path);
         }
     }
 }
