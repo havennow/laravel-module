@@ -330,4 +330,16 @@ PHP;
             $this->info('Has already been created :' . $path);
         }
     }
+
+    private function makeModuleCleanArchFolder(): void
+    {
+        $path = $this->getPathOfModules();
+
+        if (!is_dir($path)) {
+            File::makeDirectory($path);
+            $this->info('Created module path : ' . $path);
+        } else {
+            $this->info('Has already been created :' . $path);
+        }
+    }
 }
